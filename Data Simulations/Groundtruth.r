@@ -101,7 +101,7 @@ true_counts_res <- SimulateTrueCounts(
 
 
 groundtruth_3 <- true_counts_res[["counts"]]
-View(groundruth_3)
+View(groundtruth_3)
 
 
 
