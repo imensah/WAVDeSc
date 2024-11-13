@@ -1,0 +1,16 @@
+%Execute command below on the terminal
+
+%%%% Denoising the noisy nonUMI with DCA
+dca /home/isabel/Desktop/DCAresults/500by300/Noisy_nonUMI.csv /home/isabel/Desktop/DCAresults/500by300/DCA_nonUMI.csv
+
+%%%%% real	0m5.413s
+%%%%% user	0m8.559s
+%%%%% sys	0m1.412s
+
+%%%%% Denoising the noisy umi with DCA
+dca /home/isabel/Desktop/DCAresults/500by300/Noisy_umi.csv /home/isabel/Desktop/DCAresults/500by300/DCA_UMI.csv 
+
+%%%%% real	0m5.185s
+%%%%% user	0m8.053s
+%%%%% sys	0m1.251s
+
