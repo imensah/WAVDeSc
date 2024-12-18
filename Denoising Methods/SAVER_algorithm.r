@@ -1,77 +1,109 @@
 library(SAVER)
-library(Matrix)
+library(parallel)
 
-repo_dir = "/home/jay/Desktop/WAVDeSc_repo" # Set this to the folder containing the cloned repository (i.e. local path to "review-scRNA-seq-DENOISING")
+cl <- makeCluster(3)  # Create a cluster with 3 cores
+registerDoParallel(cl)  # Register the cluster for parallel operations
+
+repo_dir = "/home/jay/Desktop/WAVDeSc_repo" # Set this to the folder containing the cloned repository (i.e. local path to "WAVDeSc_repo")
 source(paste0(repo_dir, "/Data Simulations/Simulations.r"))
 # Set this to the path of the folder containing the csv of datasets with noise
-# e.g., to denoise synthetic datasets with the most variables genes, set this to "localPath/review-scRNA-seq-DENOISING/final_data/csv_mostvar"
-
 work_dir = "/home/jay/Desktop/WAVDeSc_repo/Data Simulations" 
 setwd(work_dir)
 
 
 algorithm = "saver"
-inputDir = "/home/jay/Desktop/WAVDeSc_repo/Data Simulations/"
+inputDir = "/home/jay/Desktop/WAVDeSc_repo/Data Simulations/Noisy_files/"
 outputDir = paste0("denoised_",algorithm,"/")
 
 
-# Get a list of all files in the input directory that contain "noisy" in their name
+if(!dir.exists(outputDir)){dir.create(outputDir)} #Creates directory if it doesn't exist
+
 noisy_files <- list.files(inputDir, pattern = "noisy")
 
-for (files in noisy_files ){
+write("experiment,method,cpuTime,elapsedTime,RAMpeak(MiB)", 
+      file=paste0(outputDir,"runtime.csv"), append=T)
 
-  # Extract the experiment name by removing "noisy" and ".csv"
-  experiment_name = gsub("noisy|\\.csv$", "", files)
-  print(experiment_name)
-  denoised_name <- paste0(outputDir, experiment_name, "_denoised_",algorithm,".csv")
-  if(file.exists(denoised_name)){next}
-   tmp = read.csv(file=paste0(inputDir, files))
-#   tmp <- as.matrix(tmp)
-#   View(tmp)
-
-    # if (!any(grepl("matrix", class(x), ignore.case = TRUE))) {
-    #     tmp = read.csv(file=paste0(inputDir, files))
-    #     tmp <- as.matrix(tmp)
-    # }
-
-
-
-#  denoise_saver <- saver(tmp, ncores = 3)
-#  saverdenoised <- denoise_saver$estimate
-  denoise_saver <-saver(tmp, ncores = 3)
-  saverdenoised <- denoise.saver$estimate
-  View(saverdenoised )
+peakRAM_custom <- function(...){
+  # Capture R expressions or function calls
+  args <- c(as.list(match.call(expand.dots = FALSE)$`...`), NULL)
+  Function <- sapply(args, function(e) paste0(deparse(e), collapse = ""))
+  Function <- sapply(Function, function(e) gsub(" ", "", e))
+  # Initialize containers for output
+  numfunc <- length(args)
+  totaltime <- vector("numeric", numfunc)
+  usertime <- vector("numeric", numfunc)
+  RAMused <- vector("numeric", numfunc)
+  RAMpeak <- vector("numeric", numfunc)
+  i <- 1
+  for(arg in args){
+    # Reset garbage collector and save baseline
+    start <- gc(verbose = FALSE, reset = TRUE)
+    # Evaluate regular and anonymous functions
+    evalTime <- system.time(result <- eval.parent(arg))
+    if(inherits(result, "function")){
+      evalTime <- system.time(output <- result())
+      rm(result)
+    }else{
+      output <- result
+      rm(result)
+    }
+    # Call garbage collector and save post-eval
+    end <- gc(verbose = FALSE, reset = FALSE)
+    rm(output)
+    # Calculate total and peak RAM used
+    totaltime[i] <- as.numeric(evalTime["elapsed"])
+    usertime[i] <- as.numeric(evalTime["user.self"])
+    RAMused[i] <- end[2, 2] - start[2, 2]
+    RAMpeak[i] <- end[2, 6] - start[2, 6]
+    i <- i + 1
+  }
+  data.frame("Function_Call" = Function,
+             "Elapsed_Time_sec" = totaltime,
+             "user_Time_sec" = usertime,
+             "Total_RAM_Used_MiB" = RAMused,
+             "Peak_RAM_Used_MiB" = RAMpeak,
+             row.names = 1:numfunc)
 }
-class(tmp)
 
-tmp_list<- lapply(tmp,function(x) as.numeric(x))
-tmp_list
-dim(tmp_list)
-tmp_num <- apply(tmp,function(x) as.nummeric(x))
-tmp_num <- apply(tmp,MARGIN = 1, FUN=sum)
-dim(tmp_num)
-class(tmp)
+#Looping through files to be denoised
+for (files in noisy_files ){
+  # Extract the experiment name by removing "noisy counts" and ".csv"
+  experiment_name = gsub("noisy counts|\\.csv$", "", files)
+  print(experiment_name)
+  # Define denoised file path
+  denoised_path <- paste0(outputDir, experiment_name, "_denoised_",algorithm,".csv")
+  
+  if(file.exists(denoised_path)){next} # Skip if denoised file already exists
+  
+  # Load the Data
+  data = read.csv(file=paste0(inputDir, files))
+  data_matrix <- as.matrix(data)
+  attr(data_matrix,"class")<-"matrix"
+  
+  # Run the saver algorithm
+  print(paste0("Running ", algorithm))
+  start = Sys.time() # record start time
 
+  t <- try(tmpD <- saver(data_matrix, ncores = 3), silent = T)
+  peakMemory = peakRAM_custom(t)
+  if(class(t) != "try-error") {
+    # Record the execution time and memory usage
+    end = Sys.time()
+    duration = end-start
+    duration_sec = as.numeric(end) - as.numeric(start)
+    print("Saving results")
 
-tmp_mat = as.matrix(tmp)
-class(tmp_mat)
-
-AA = SAVER::saver(as.numeric(tmp),ncores = 3)
-str(tmp_mat)
-
-
-tmp_data <- read.csv("/home/jay/Desktop/WAVDeSc_repo/Data Simulations/noisy counts UMI (100 x 50).csv")
-# tmp_data_mat <- as.matrix(tmp_data)
-
-tmp_data <- apply(tmp_data, 2, as.numeric)
-
-
-# class(tmp_data_mat)
-str(tmp_data)
-View(tmp_data)
-
-Ab <- SAVER::saver(tmp_data, ncores = 3)
-str(tmp_data_mat)
-type(tmp_data_mat)
-
-
+    # Round and save denoised data
+    tmpD <- round(tmpD$estimate, digits = 2)
+    write.table(tmpD, file = denoised_path, sep = ",", col.names = T, row.names = T)
+    write(paste(experiment_name,
+                algorithm,
+                peakMemory$user_Time_sec,
+                peakMemory$Elapsed_Time_sec,
+                peakMemory$Peak_RAM_Used_MiB,  sep=','),
+          file=paste0(outputDir,"runtime.csv"), append=T)
+  }else {
+    print("ERROR!")
+    write(paste(experiment_name, algorithm, "error", "error", "error", sep=','), file=paste0(outputDir,"runtime.csv"), append=T)
+  }
+}
