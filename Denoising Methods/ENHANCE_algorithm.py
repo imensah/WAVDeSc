@@ -14,6 +14,8 @@
 import time
 import sys
 import os
+import glob
+import pandas as pd
 from math import ceil
 from typing import Tuple, Iterable, Optional, Dict, List
 import hashlib
@@ -326,59 +328,112 @@ if __name__ == '__main__':
     stream_handler.setFormatter(formatter)
     logger.addHandler(stream_handler)
 
-    @click.command()
-    @click.option('-f', '--fpath', help='The input UMI-count matrix.')
-    @click.option('-o', '--saveto', default=None, help='The output matrix.')
-    @click.option('--transcript-count', type=int, default=200000,
-                  help='The target median transcript count for determining the'
-                       'number of neighbors to use for aggregation.'
-                       '(Ignored if "--num-neighbors" is specified.)')
-    @click.option('--max-neighbor-frac', type=float, default=0.02,
-                  help='The maximum number of neighbors to use for '
-                       'aggregation, relative to the total number of cells in '
-                       'the dataset. '
-                       '(Ignored if "--num-neighbors" is specified.)')
-    @click.option('--pc-var-fold-thresh', type=float, default=2.0,
-                  help='The fold difference in variance required for relevant '
-                       'PCs, relative to the variance of the first PC of '
-                       'a simulated dataset containing only noise.')
-    @click.option('--max-components', type=int, default=50,
-                  help='The maximum number of principal components to use.')
-    @click.option('--num-neighbors', type=int, default=None, show_default=True,
-                  help='The number of neighbors to use for aggregation.')
-    @click.option('--sep', default='\t', show_default=False,
-                  help='Separator used in input file. The output file will '
-                       'use this separator as well.  [default: \\t]')
-    @click.option('--use-double-precision', is_flag=True,
-                  help='Whether to use double-precision floating point format.'
-                       ' (This doubles the amount of memory required.)')
-    @click.option('--seed', default=0, show_default=True,
-                  help='Seed for pseudo-random number generator.')
-    @click.option('--test', is_flag=True,
-                  help='Test if results for test data are correct.')
-    def main(
-            fpath, saveto,
-            transcript_count, max_neighbor_frac, pc_var_fold_thresh,
-            max_components, num_neighbors,
-            sep, use_double_precision, seed, test):
+    
+@click.command()
+@click.option('-f', '--fpath', help='The input UMI-count matrix.')
+@click.option('-o', '--saveto', default=None, help='The output matrix.')
+@click.option('--transcript-count', type=int, default=200000,
+              help='The target median transcript count for determining the'
+                   ' number of neighbors to use for aggregation.'
+                   '(Ignored if "--num-neighbors" is specified.)')
+@click.option('--max-neighbor-frac', type=float, default=0.02,
+              help='The maximum number of neighbors to use for '
+                   'aggregation, relative to the total number of cells in '
+                   'the dataset. '
+                   '(Ignored if "--num-neighbors" is specified.)')
+@click.option('--pc-var-fold-thresh', type=float, default=2.0,
+              help='The fold difference in variance required for relevant '
+                   'PCs, relative to the variance of the first PC of '
+                   'a simulated dataset containing only noise.')
+@click.option('--max-components', type=int, default=50,
+              help='The maximum number of principal components to use.')
+@click.option('--num-neighbors', type=int, default=None, show_default=True,
+              help='The number of neighbors to use for aggregation.')
+@click.option('--sep', default='\t', show_default=False,
+              help='Separator used in input file. The output file will '
+                   'use this separator as well.  [default: \\t]')
+@click.option('--use-double-precision', is_flag=True,
+              help='Whether to use double-precision floating point format.'
+                   ' (This doubles the amount of memory required.)')
+@click.option('--seed', default=0, show_default=True,
+              help='Seed for pseudo-random number generator.')
+@click.option('--test', is_flag=True,
+              help='Test if results for test data are correct.')
+def main(fpath, saveto,
+         transcript_count, max_neighbor_frac, pc_var_fold_thresh,
+         max_components, num_neighbors,
+         sep, use_double_precision, seed, test):
+    
+    if fpath is None:
+        # Provide a default file path if not provided
+        fpath = "/home/jay/Desktop/WAVDeSc_repo/Data Simulations/Noisy_files"
+        _LOGGER.warning('No input file path provided. Using default directory: %s', fpath)
 
-        if use_double_precision:
-            dtype = np.float64
-        else:
-            dtype = np.float32
+    if use_double_precision:
+        dtype = np.float64
+    else:
+        dtype = np.float32
 
-        if saveto is None:
-            _LOGGER.warning('No output file specified! Will not store results.')
+    if saveto is None:
+        _LOGGER.warning('No output file specified! Will not store results.')
 
-        fpath_expanded = os.path.expanduser(fpath)
+    # Check if the input path is a directory or a single file
+    fpath_expanded = os.path.expanduser(fpath)
+
+    # If it's a directory, process both UMI and non-UMI files
+    if os.path.isdir(fpath_expanded):
+        # Find all CSV files in the directory
+        files = glob.glob(os.path.join(fpath_expanded, '*.csv'))  # Modify pattern based on file type
+        if len(files) == 0:
+            _LOGGER.error('No CSV files found in the specified directory: %s', fpath_expanded)
+            return
+
+        for file in files:
+            _LOGGER.info('Processing file: %s', file)
+            matrix = pd.read_csv(file, index_col=0, sep=sep)
+            p, n = matrix.shape
+            _LOGGER.info('The expression matrix contains %d genes and %d cells.', p, n)
+            
+            # Perform denoising for each file
+            result = enhance(
+                matrix.values.T,
+                target_transcript_count=transcript_count,
+                max_neighbor_frac=max_neighbor_frac,
+                pc_var_fold_thresh=pc_var_fold_thresh,
+                max_components=max_components,
+                k=num_neighbors,
+                use_double_precision=use_double_precision,
+                seed=seed)
+            
+            D = result[0]
+
+            # Save the results if 'saveto' is specified
+            if saveto is not None:
+                _LOGGER.info('Writing the denoised expression matrix to "%s"...', saveto)
+                sys.stdout.flush()
+                matrix = pd.DataFrame(D.T, index=matrix.index, columns=matrix.columns)
+                # Save to separate output files based on input files
+                output_file = os.path.join(saveto, os.path.basename(file))
+                saveto_expanded = os.path.expanduser(output_file)
+                matrix.to_csv(saveto_expanded, sep=sep)
+                file_size = os.path.getsize(saveto_expanded) / 1e6
+                _LOGGER.info('File size: %.1f MB.', file_size)
+
+            if test:
+                denoised_hash = get_hash(D)
+                if denoised_hash == '3b77e847e27875a159c628759d1b60fe':
+                    _LOGGER.info('Output is identical!')
+                else:
+                    _LOGGER.warning('Output is not identical!')
+    else:
+        # Process a single file if the input path is not a directory
         file_size = os.path.getsize(fpath_expanded) / 1e6
-        _LOGGER.info('Reading the expression matrix (%.1f MB) from "%s"...',
-                     file_size, fpath)
+        _LOGGER.info('Reading the expression matrix (%.1f MB) from "%s"...', file_size, fpath)
         matrix = pd.read_csv(fpath_expanded, index_col=0, sep=sep)
         p, n = matrix.shape
-        _LOGGER.info('The expression matrix contains %d genes and %d cells.',
-                     p, n)
+        _LOGGER.info('The expression matrix contains %d genes and %d cells.', p, n)
 
+        # Perform denoising for the single file
         result = enhance(
             matrix.values.T,
             target_transcript_count=transcript_count,
@@ -392,11 +447,9 @@ if __name__ == '__main__':
         D = result[0]
 
         if saveto is not None:
-            _LOGGER.info('Writing the denoised expression matrix to "%s"...',
-                        saveto)
+            _LOGGER.info('Writing the denoised expression matrix to "%s"...', saveto)
             sys.stdout.flush()
-            matrix = pd.DataFrame(
-                D.T, index=matrix.index, columns=matrix.columns)
+            matrix = pd.DataFrame(D.T, index=matrix.index, columns=matrix.columns)
             saveto_expanded = os.path.expanduser(saveto)
             matrix.to_csv(saveto_expanded, sep=sep)
             file_size = os.path.getsize(saveto_expanded) / 1e6
@@ -408,5 +461,4 @@ if __name__ == '__main__':
                 _LOGGER.info('Output is identical!')
             else:
                 _LOGGER.warning('Output is not identical!')
-
     main()

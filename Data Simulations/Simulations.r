@@ -21,6 +21,8 @@ registerDoParallel(cl)
 ngenes <<- 100
 ncells <<- 50
 
+work_dir <- "/home/jay/Desktop/WAVDeSc_repo/Data Simulations"
+
 # Simulating True Counts based on simulation dimension
 simulate_truecount <- function(ngenes, ncells) {
   phyla1 <- Phyla5() # First phylogenetic tree
@@ -53,7 +55,9 @@ simulate_truecount <- function(ngenes, ncells) {
 true_counts_res <- simulate_truecount(ngenes,ncells)
 groundtruth <- true_counts_res[["counts"]]
 df_title <- paste("groundtruth (", ngenes, " x ", ncells, ")", sep = "") #setting title for the Dataframe
-View(groundtruth, title = df_title)
+write.csv(groundtruth, file = paste0(work_dir, "/",df_title,".csv"), row.names = FALSE)
+
+
 
 # Simulate noisy counts based on protocol (UMI and nonUMI)
 simulate_noisycount <- function(protocol) {
@@ -84,7 +88,7 @@ simulate_noisycount <- function(protocol) {
     protocol = protocol,
     gene_len = gene_len,
     alpha_mean = n_params$alpha_mean,
-    alpha_sd = n_params$alpha_sd,
+    alpha_sd = n_params$alpha_sd, 
     depth_mean = n_params$depth_mean,
     depth_sd = n_params$depth_sd,
     nPCR1 = 14
@@ -97,13 +101,13 @@ simulate_noisycount <- function(protocol) {
 observed_counts_umi <- simulate_noisycount("UMI")
 noisy_counts_umi <- observed_counts_umi[["counts"]]
 df_title_umi <- paste("noisy counts UMI (", ngenes, " x ", ncells, ")", sep = "") #setting title for the Dataframe
-View(noisy_counts_umi, title = df_title_umi)
+write.csv(noisy_counts_umi, file = paste0(work_dir, "/",df_title_umi,".csv"), row.names = FALSE)
 
 # Run simulation for noisy counts (nonUMI) and view results
 observed_counts_nonumi <- simulate_noisycount("nonUMI")
 noisy_counts_nonumi <- observed_counts_nonumi[["counts"]]
 df_title_nonumi <- paste("noisy counts nonUMI (", ngenes, " x ", ncells, ")", sep = "") #setting title for the Dataframe
-View(noisy_counts_nonumi, title = df_title_nonumi)
+write.csv(noisy_counts_nonumi, file = paste0(work_dir, "/",df_title_nonumi,".csv"), row.names = FALSE)
 
 
 # Plotting clusters for Various Simulations
