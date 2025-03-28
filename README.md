@@ -1,20 +1,20 @@
 <p align="center">
-<strong><span style="font-size: 500px;">WAVDeSc: Wavelet Denoising for single-cell RNA-seq Data</span></strong>
+  <strong><h1>WAVDeSc: Wavelet Denoising for single-cell RNA-seq Data</h1></strong>
 </p>
 
-This repository contains a tool for denoising single-cell RNA-seq (scRNA-seq) data. WAVDesC leverages biorthogonal wavelet transforms to decompose scRNA-seq data into different frequency components and applies Bayesian thresholding to remove noise. The pipeline comprises three main phases: Signal Decomposition, Thresholding, and Signal Reconstruction aimed at prducing a denoised output. The approach enables the recovery of technical zeros and enhance quality while preserving important biological signals and improving downstream analyses. 
+This repository contains a tool for denoising single-cell RNA-seq (scRNA-seq) data. WAVDeSc leverages biorthogonal wavelet transforms to decompose scRNA-seq data into different frequency components and applies Bayesian thresholding to remove noise. The pipeline comprises three main phases: Signal Decomposition, Thresholding, and Signal Reconstruction aimed at producing a denoised output. The approach enables the recovery of technical zeros and enhances quality while preserving important biological signals and improving downstream analyses.  
 
-## Features
+## Features  
 
--  Reads scRNA-seq data
--  Uses wavelet transform for noise reduction
-  
-## Dependencies
+- Reads scRNA-seq data  
+- Uses wavelet transform for noise reduction  
 
-Ensure that you have MATLAB installed with:
-  - Wavelet Toolbox:</br>
-  `licence('test', 'Wavelet_Toolbox')`
+## Dependencies  
 
-## License
+Ensure that you have MATLAB installed with:  
+  - Wavelet Toolbox:</br>  
+  `licence('test', 'Wavelet_Toolbox')`  
 
-This project is open-source.
+## License  
+
+This project is open-source.  
