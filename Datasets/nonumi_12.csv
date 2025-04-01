@@ -1,0 +1,6 @@
+MODEL,False_Negative,True_Positive,False_Positive,True_Negative
+MAGIC,3,251,165,79
+SAVER,107,147,1,243
+ENHANCE,57,197,8,236
+WAVDeSc_bior2.6,20,234,48,196
+WAVDeSc_db6,25,229,52,192
