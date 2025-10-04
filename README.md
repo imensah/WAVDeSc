@@ -9,11 +9,33 @@ All scripts are stored in the [`scripts/`](./scripts) directory.
 ---
 
 ## Repository Structure
-├── scripts/ </br>
-├── data/ </br>
+├── Denoising Methods/ </br>
+├── Evaluation methods codes/ </br>
+├── datasets/ </br>
 ├── results/ </br>
+├── scripts/ </br>
 └── README.md 
 
+
+
+---
+
+## Figures and Corresponding Scripts
+
+| **Figure** | **Description** | **Script** |
+|------------|-----------------|------------|
+| Figure 3   | Heatmaps | [`scripts/notebooks/fig_3/Heatmaps.ipynb`](scripts/notebooks/fig_3/Heatmaps.ipynb) |
+| Figure 4   | Evaluation Methods| [`scripts/DCA_tsne.ipynb`](./scripts/DCA_tsne.ipynb) |
+
+
+---
+
+## Usage
+
+1. Clone the repository  
+   ```bash
+   git clone https://github.com/<your-username>/<repo-name>.git
+   cd <repo-name>
 
 ## Features  
 
