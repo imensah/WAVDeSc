@@ -9,10 +9,10 @@ All scripts are stored in the [`scripts/`](./scripts) directory.
 ---
 
 ## Repository Structure
-├── scripts/ # Jupyter notebooks and scripts for reproducing figures
-├── data/ # (Optional) Example input data / instructions to obtain data
-├── results/ # Processed outputs and figures
-└── README.md # Documentation
+├── scripts/ </br>
+├── data/ </br>
+├── results/ </br>
+└── README.md 
 
 
 ## Features  
