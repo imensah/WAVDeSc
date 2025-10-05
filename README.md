@@ -2,23 +2,38 @@
   <strong><h1>WAVDeSc: Wavelet Denoising for single-cell RNA-seq Data</h1></strong>
 </p>
 
-This repository contains the data, scripts and notebooks used to generate the figures in our analysis of **scRNA-seq denoising methods** (DCA, ENHANCE, MAGIC, SAVER) and **WAVDESC** the tool we propose. WAVDeSc leverages biorthogonal wavelet transforms to decompose scRNA-seq data into different frequency components and applies Bayesian thresholding to remove noise. The pipeline comprises three main phases: Signal Decomposition, Thresholding, and Signal Reconstruction aimed at producing a denoised output. The approach enables the recovery of technical zeros and enhances quality while preserving important biological signals and improving downstream analyses.  
+## Table of Contents
+- [Repository Structure](#Repository-Structure)
+- [Background](#Background)
+- [Workflow](#Workflow)
+- [Usage](#Usage)
+- [References](#References)
 
-All scripts are stored in the [`scripts/`](./scripts) directory.
+
+## Repository Structure
+This repository contains the datasets and scripts used to generate the figures in our analysis of **scRNA-seq denoising** using **(DCA, ENHANCE, MAGIC, SAVER)** and **WAVDESC** the tool we propose. 
+
+├── Denoising Methods </br>
+├── Evaluation methods codes/ </br>
+├── datasets </br>
+├── results </br>
+├── scripts </br>
+└── README.md 
+
+---
+
+## Background
+WAVDeSc leverages biorthogonal wavelet transforms to decompose scRNA-seq data into different frequency components and applies Bayesian thresholding to remove noise. The pipeline comprises three main phases: Signal Decomposition, Thresholding, and Signal Reconstruction aimed at producing a denoised scRNA-seq output. The approach enables the recovery of technical zeros and enhances quality while preserving important biological signals and improving downstream analyses.  
+
+## Workflow
+The diagram below outlines the end-to-end workflow of the WAVDesC pipeline, highlighting its main processing steps and data flow from initial preprocessing to final output.
 
 <img width="1314" height="930" alt="DIAUP" src="https://github.com/user-attachments/assets/ac9579c1-fa83-495d-a32d-e64097501e31" />
 
 ---
 
-## Repository Structure
-├── Denoising Methods/ </br>
-├── Evaluation methods codes/ </br>
-├── datasets/ </br>
-├── results/ </br>
-├── scripts/ </br>
-└── README.md 
 
-
+All scripts are stored in the [`scripts/`](./scripts) directory.
 
 ---
 
