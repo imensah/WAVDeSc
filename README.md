@@ -13,13 +13,12 @@
 ## Repository Structure
 This repository contains the datasets and scripts used to generate the figures in our analysis of **scRNA-seq denoising** using **(DCA, ENHANCE, MAGIC, SAVER)** and **WAVDESC** the tool we propose. 
 
-├── [`Denoising Methods`](Denoising-Methods/) </br>
-├── Evaluation methods codes/ </br>
-├── datasets </br>
-├── results </br>
-├── scripts </br>
-└── README.md 
-
+├── [`Datasets`](datasets/) </br>
+├── [`Denoising Methods`](denoising_methods/) </br>
+├── [`Evaluation Methods`](evaluatin_methods/) </br>
+├── [`Results`](results/) </br>
+└── [`Scripts`](scripts/) </br>
+ 
 ---
 
 ## Background
