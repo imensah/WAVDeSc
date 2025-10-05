@@ -6,6 +6,8 @@ This repository contains the data, scripts and notebooks used to generate the fi
 
 All scripts are stored in the [`scripts/`](./scripts) directory.
 
+<img width="1314" height="930" alt="DIAUP" src="https://github.com/user-attachments/assets/ac9579c1-fa83-495d-a32d-e64097501e31" />
+
 ---
 
 ## Repository Structure
