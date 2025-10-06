@@ -49,9 +49,12 @@ Do you want me to make it sound more **formal (like a methods section)** or **pr
 ## Figures, Description, Corresponding Scripts and Data used
 
 | **Figure** | **Description** | **Script** | **Data** |
-|------------|-----------------|------------|
-| Figure 3   | Heatmaps | [`scripts/01_heatmap.R`](scripts/01_heatmap.R) | [`Denoised`](datasets/denoised/) |
-| Figure 4   | Evaluation Methods| [`scripts/02_evaluation.ipynb`](scripts/02_evaluation.ipynb) | |
+|------------|-----------------|------------|----------|
+| Figure 3   | Heatmaps | [`scripts/01_heatmap.R`](scripts/01_heatmap.R) | [`Denoised`](https://drive.google.com/drive/folders/1ZIsCOOtKXTXJVcW9-7o2D8WaCsxTbIqK?usp=drive_link) |
+| Figure 4   | CV Profiles| [`scripts/02_evaluation.ipynb`](scripts/02_evaluation.ipynb) | [`Simulated`](https://drive.google.com/drive/folders/1WSoh79Ld9zFioh51t5e4RBiO6TywRNQL?usp=sharing) |
+| Figure 5   | Cell Clusters | [`scripts/02_evaluation.ipynb`](scripts/02_evaluation.ipynb) | [`Simulated`](https://drive.google.com/drive/folders/1WSoh79Ld9zFioh51t5e4RBiO6TywRNQL?usp=sharing) |
+| Figure 6   | Performance Metrics | [`scripts/02_evaluation.ipynb`](scripts/02_evaluation.ipynb) | [`Simulated`](https://drive.google.com/drive/folders/1WSoh79Ld9zFioh51t5e4RBiO6TywRNQL?usp=sharing) |
+| Figure 7   | Compute Runtime | [`scripts/02_evaluation.ipynb`](scripts/02_evaluation.ipynb) | [`Simulated`](https://drive.google.com/drive/folders/1WSoh79Ld9zFioh51t5e4RBiO6TywRNQL?usp=sharing) |
 
 
 ---
