@@ -54,7 +54,7 @@ Do you want me to make it sound more **formal (like a methods section)** or **pr
 | Fig 4   | Coefficient of Variation Profiles| [`scripts/02_cv_profiles.ipynb`](scripts/02_cv_profiles.ipynb) | [ Data ](https://drive.google.com/drive/folders/1WSoh79Ld9zFioh51t5e4RBiO6TywRNQL?usp=sharing) |
 | Fig 5   | Cell Clusters Plot| [`scripts/03_cell_clustering.R`](scripts/03_cell_clustering.R) | [ Data ](https://drive.google.com/drive/folders/1ThLe1NoXmWD2MAQ1pCQopG6CLMeWW6AU?usp=sharing) |
 | Fig 5   | ARI_NMI Plot | [`scripts/03_ari_nmi.ipynb`](scripts/03_ari_nmi.ipynb) | [ Data ](https://drive.google.com/drive/folders/1ThLe1NoXmWD2MAQ1pCQopG6CLMeWW6AU?usp=sharing) |
-| Fig 6   | Performance Metrics Line Graph | [`scripts/02_evaluation.ipynb`](scripts/04_DEGs_lingraph.ipynb) | [ Data ](https://drive.google.com/drive/folders/1ZIsCOOtKXTXJVcW9-7o2D8WaCsxTbIqK?usp=drive_link)|
+| Fig 6   | Performance Metrics Line Graph | [`scripts/04_DEGs_lingraph.ipynb`](scripts/04_DEGs_lingraph.ipynb) | [ Data ](https://drive.google.com/drive/folders/1ZIsCOOtKXTXJVcW9-7o2D8WaCsxTbIqK?usp=drive_link)|
 | Fig 7   | Computational Runtime | [`scripts/02_evaluation.ipynb`](scripts/05_computational_runtime.ipynb) | [ Data ](datasets/compute_runtime_data.csv) |
 
 
