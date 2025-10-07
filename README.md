@@ -55,7 +55,7 @@ Do you want me to make it sound more **formal (like a methods section)** or **pr
 | Fig 5   | Cell Clusters Plot| [`scripts/03_cell_clustering.R`](scripts/03_cell_clustering.R) | [ Data ](https://drive.google.com/drive/folders/1ThLe1NoXmWD2MAQ1pCQopG6CLMeWW6AU?usp=sharing) |
 | Fig 5   | ARI_NMI Plot | [`scripts/03_ari_nmi.ipynb`](scripts/03_ari_nmi.ipynb) | [ Data ](https://drive.google.com/drive/folders/1ThLe1NoXmWD2MAQ1pCQopG6CLMeWW6AU?usp=sharing) |
 | Fig 6   | Performance Metrics Line Graph | [`scripts/04_DEGs_lingraph.ipynb`](scripts/04_DEGs_lingraph.ipynb) | [ Data ](datasets/performance/)|
-| Fig 7   | Computational Runtime | [`scripts/02_evaluation.ipynb`](scripts/05_computational_runtime.ipynb) | [ Data ](datasets/computeRuntime/compute_runtime_data.csv) |
+| Fig 7   | Computational Runtime | [`scripts/05_computational_runtime.ipynb`](scripts/05_computational_runtime.ipynb) | [ Data ](datasets/computeRuntime/compute_runtime_data.csv) |
 
 
 ---
