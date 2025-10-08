@@ -7,6 +7,7 @@
 - [Background](#Background)
 - [Workflow](#Workflow)
 - [Datasets](#Datasets)
+- [Denoising Methods](#Denoising-Methods)
 - [Usage](#Usage)
 - [References](#References)
 
@@ -60,12 +61,45 @@ Do you want me to make it sound more **formal (like a methods section)** or **pr
 
 ---
 
+## Denoising Methods
+
+This directory contains implementations of multiple **single-cell RNA-seq denoising algorithms**, along with corresponding execution scripts for running them.  
+
+Each method is represented by **two files**:  
+- **`*_algorithm.*`** → The main script implementing the denoising algorithm.  
+- **`*_execute.*`** → The execution script (or helper file) showing how to run the algorithm with example inputs.  
+
+---
+
+## Available Methods
+
+| Method   | Algorithm File | Execution File |
+|----------|----------------|----------------|
+| **DCA** | [DCA_algorithm.py](denoising_methods/DCA_algorithm.py) | [DCA_execute.txt](denoising_methods/DCA_execute.txt) |
+| **ENHANCE** | [ENHANCE_algorithm.py](denoising_methods/ENHANCE_algorithm.py) | [ENHANCE_execute.txt](denoising_methods/ENHANCE_execute.txt) |
+| **MAGIC** | [MAGIC_algorithm.py](denoising_methods/MAGIC_algorithm.py) | [MAGIC_execute.py](denoising_methods/MAGIC_execute.py) |
+| **SAVER** | [SAVER_algorithm.r](denoising_methods/SAVER_algorithm.r) | [SAVER_execute.r](denoising_methods/SAVER_execute.r) |
+| **WAVDeSc** | [WAVDeSc_algorithm.m](denoising_methods/WAVDeSc_algorithm.m) | [WAVDeSc_execute.m](denoising_methods/WAVDeSc_execute.m) |
+
+---
+
+## File Extensions
+- `.py` → Python scripts  
+- `.r` → R scripts  
+- `.m` → MATLAB scripts  
+- `.txt` → Example command-line instructions  
+
+--- 
 ## Usage
 
 1. Clone the repository  
    ```bash
    git clone https://github.com/<your-username>/<repo-name>.git
    cd <repo-name>
+
+### Running Denoising methods and WAVDeSc
+1. Open the relevant `*_algorithm.*` file to inspect or modify the denoising method.  
+2. Use the corresponding `*_execute.*` file for instructions or ready-to-run examples.  
 
 ## Features  
 
