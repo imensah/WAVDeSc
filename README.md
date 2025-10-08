@@ -9,6 +9,7 @@
 - [Datasets](#Datasets)
 - [Denoising Methods](#Denoising-Methods)
 - [Usage](#Usage)
+- [Features](#Features)
 - [References](#References)
 
 
@@ -94,12 +95,19 @@ Each method is represented by **two files**:
 
 1. Clone the repository  
    ```bash
-   git clone https://github.com/<your-username>/<repo-name>.git
-   cd <repo-name>
+   git clone https://github.com/imensah/WAVDeSc.git
+   cd WAVDeSc
 
 ### Running Denoising methods and WAVDeSc
 1. Open the relevant `*_algorithm.*` file to inspect or modify the denoising method.  
-2. Use the corresponding `*_execute.*` file for instructions or ready-to-run examples.  
+2. Use the corresponding `*_execute.*` file for instructions or ready-to-run examples.
+
+#### **WAVDeSc**
+- `cd WAVDeSc`
+- Open the relevant `WAVDeSc_algorithm.m` file to inspect or modify the denoising method.
+- Use the corresponding `WAVDeSc_execute.m` file for execution
+
+--- 
 
 ## Features  
 
