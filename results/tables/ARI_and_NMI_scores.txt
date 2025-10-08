@@ -1,0 +1,126 @@
+--------- ARI and NMI scores ----------
+# simulated data
+> AR1 = NOISY$ARI
+> round(AR1, 3)
+[1] 0.471
+> NMI =NOISY$NMI
+> round(NMI,3)
+[1] 0.54
+
+
+> AR1 = MAGIC$ARI
+> round(AR1, 3)
+[1] 0.033
+> NMI =MAGIC$NMI
+> round(NMI,3)
+[1] 0.059
+
+
+> AR1 = SAVER$ARI
+> round(AR1, 3)
+[1] 0.354
+> NMI =SAVER$NMI
+> round(NMI,3)
+[1] 0.428
+
+
+> AR1 = Enhance$ARI
+> round(AR1, 3)
+[1] 0.332
+> NMI =Enhance$NMI
+> round(NMI,3)
+[1] 0.369
+
+
+> AR1 = DCA$ARI
+> round(AR1, 1)
+[1] 0.2
+> NMI =DCA$NMI
+> round(NMI,1)
+[1] 0.3
+
+
+> AR1 = WAVDESC$ARI
+> round(AR1, 1)
+[1] 0.6
+> NMI =WAVDESC$NMI
+> round(NMI,1)
+[1] 0.6
+
+
+
+--------silhouette scores ------------
+> NSS
+[1] -0.103
+
+> DSS
+[1] -0.125
+
+> ESS
+[1] 0.014
+
+> MSS
+[1] 0.119
+
+> SSS
+[1] -0.049
+
+> WSS
+[1] -0.093
+
+
+
+
+# PBMC data
+# noisy
+> AR1 = results$ARI
+> round(AR1, 3)
+[1] 0.003
+> NMI =results$NMI
+> round(NMI,3)
+[1] 0.005
+
+
+# magic
+> AR1 = MAGIC$ARI
+> round(AR1, 3)
+[1] 0
+> NMI =MAGIC$NMI
+> round(NMI,3)
+[1] 0.006
+
+
+# saver
+> AR1 = SAVER$ARI
+> round(AR1, 3)
+[1] 0.002
+> NMI =SAVER$NMI
+> round(NMI,3)
+[1] 0.004
+
+
+# enhance
+> AR1 = Enhance$ARI
+> round(AR1, 3)
+[1] 0
+> NMI =Enhance$NMI
+> round(NMI,3)
+[1] 0.006
+
+
+# dca
+> AR1 = DCA$ARI
+> round(AR1,3)
+[1] 0.004
+> NMI =DCA$NMI
+> round(NMI,3)
+[1] 0.005
+
+
+# wavdesc
+> AR1 = WAVDESC$ARI
+> round(AR1, 3)
+[1] 0.004
+> NMI =WAVDESC$NMI
+> round(NMI,3)
+[1] 0.005

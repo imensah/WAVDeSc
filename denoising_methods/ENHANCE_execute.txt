@@ -1,0 +1,3 @@
+#!/usr/bin/env python3
+
+python3 enhance.py -f pbmc-4k_expression.tsv.gz -o denoised_pbmc-4k_expression.tsv
