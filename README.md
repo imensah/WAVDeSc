@@ -102,7 +102,7 @@ Ensure that you have MATLAB installed with:
   - Wavelet Toolbox:</br>  
   `licence('test', 'Wavelet_Toolbox')`
 
-### **WAVDeSc Function**
+#### **WAVDeSc Function**
 Clone the repository  
    ```bash
    git clone https://github.com/imensah/WAVDeSc.git
@@ -113,7 +113,7 @@ Clone the repository
 
 ### **Quick Start**
 
-### Basic Usage
+#### **Basic Usage**
 
 ```matlab
 % Load and denoise scRNA-seq data with default parameters
