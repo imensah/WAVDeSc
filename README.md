@@ -91,34 +91,233 @@ Each method is represented by **two files**:
 - `.txt` → Example command-line instructions  
 
 --- 
+
 ## Usage
 
-1. Clone the repository  
-   ```bash
-   git clone https://github.com/imensah/WAVDeSc.git
-   cd WAVDeSc
-
-### Running Denoising methods and WAVDeSc
-1. Open the relevant `*_algorithm.*` file to inspect or modify the denoising method.  
-2. Use the corresponding `*_execute.*` file for instructions or ready-to-run examples.
-
-#### **WAVDeSc**
-- `cd WAVDeSc`
-- Open the relevant `WAVDeSc_algorithm.m` file to inspect or modify the denoising method.
-- Use the corresponding `WAVDeSc_execute.m` file for execution
-
---- 
-
-## Features  
-
-- Reads scRNA-seq data  
-- Uses wavelet transform for noise reduction  
-
-## Dependencies  
+### Getting Started  
 
 Ensure that you have MATLAB installed with:  
   - Wavelet Toolbox:</br>  
-  `licence('test', 'Wavelet_Toolbox')`  
+  `licence('test', 'Wavelet_Toolbox')`
+
+## WAVDeSc Function
+Clone the repository  
+   ```bash
+   git clone https://github.com/imensah/WAVDeSc.git
+   cd WAVDeSc
+   cd module
+   cp module </path/to/working/you_directory>  # replace with actual path
+   ```
+
+## Quick Start
+
+### Basic Usage
+
+```matlab
+% Load and denoise scRNA-seq data with default parameters
+denoised_data = WAVDeSc('path/to/data.csv');
+```
+
+### Complete Workflow Example
+
+```matlab
+% 1. Load your scRNA-seq data (TSV/CSV format)
+raw_data = readtable('expression_data.csv', 'FileType', 'text');
+
+% 2. Extract components
+gene_names = raw_data{:,1};
+cell_names = raw_data.Properties.VariableNames(2:end);
+expression_matrix = table2array(raw_data(:,2:end));
+
+% 3. Denoise with WAVDeSc
+denoised = WAVDeSc(expression_matrix, ...
+    'Wavelet', 'bior2.6', ...
+    'DecompositionLevel', 3, ...
+    'Verbose', true, ...
+    'SaveOutput', true, ...
+    'OutputPath', 'denoised_output.csv');
+```
+
+### Input Format
+
+WAVDeSc accepts three input formats:
+
+1. **File path** (CSV/TSV):
+   ```matlab
+   denoised = WAVDeSc('data.csv');
+   ```
+
+2. **Numeric matrix** (genes × cells or cells × genes):
+   ```matlab
+   denoised = WAVDeSc(expression_matrix);
+   ```
+
+3. **MATLAB table**:
+   ```matlab
+   denoised = WAVDeSc(data_table);
+   ```
+
+### Expected Data Structure
+- Rows: Genes
+- Columns: Cells (or samples)
+- Values: Raw UMI counts or normalized expression values
+
+## Common Use Cases
+
+### 1. Basic Denoising with Visualization
+
+```matlab
+[denoised, metrics, params] = WAVDeSc('data.csv', ...
+    'Verbose', true, ...
+    'PlotResults', true);
+```
+
+### 2. Custom Wavelet and Thresholding
+
+```matlab
+denoised = WAVDeSc(expression_matrix, ...
+    'Wavelet', 'db8', ...
+    'ThresholdRule', 'Soft', ...
+    'DenoisingMethod', 'UniversalThreshold');
+```
+
+### 3. Performance Evaluation with Ground Truth
+
+```matlab
+% If you have ground truth data for benchmarking
+[denoised, metrics] = WAVDeSc(noisy_data, ...
+    'GroundTruth', true_data, ...
+    'ComputeMetrics', true, ...
+    'PlotResults', true);
+
+% View metrics
+fprintf('RMSE: %.4f\n', metrics.RMSE);
+fprintf('Correlation: %.4f\n', metrics.Correlation);
+fprintf('SNR Improvement: %.2f dB\n', metrics.SNR_improvement_dB);
+```
+
+### 4. Memory-Efficient Processing for Large Datasets
+
+For datasets with high cell/gene counts that may exceed memory limits:
+
+```matlab
+% Use conservative settings to reduce memory usage
+denoised = WAVDeSc(expression_matrix, ...
+    'Wavelet', 'db4', ...              % Simpler wavelet
+    'DecompositionLevel', 3, ...       % Lower decomposition level
+    'SaveOutput', true);
+```
+
+### 5. Batch Processing Multiple Files
+
+```matlab
+% Process multiple datasets
+files = {'dataset1.csv', 'dataset2.csv', 'dataset3.csv'};
+
+for i = 1:length(files)
+    fprintf('Processing %s...\n', files{i});
+    denoised = WAVDeSc(files{i}, ...
+        'SaveOutput', true, ...
+        'OutputPath', sprintf('denoised_%d.csv', i), ...
+        'Verbose', false);
+end
+```
+
+### **Configuration Parameters**
+
+#### Essential Parameters
+
+| Parameter | Default | Options | Description |
+|-----------|---------|---------|-------------|
+| `Wavelet` | `'db6'` | `'db4'`, `'db6'`, `'db8'`, `'bior2.6'` | Wavelet function for decomposition |
+| `DecompositionLevel` | `'auto'` | `'auto'` or integer (1-8) | Depth of wavelet decomposition |
+| `DenoisingMethod` | `'Bayes'` | `'Bayes'`, `'UniversalThreshold'`, `'Minimax'` | Thresholding method |
+| `ThresholdRule` | `'Hard'` | `'Hard'`, `'Soft'` | Type of thresholding |
+
+#### Optional Parameters
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `Orientation` | `'auto'` | Data orientation: `'auto'`, `'genes_rows'`, or `'genes_cols'` |
+| `NoiseEstimate` | `'LevelDependent'` | Noise estimation: `'LevelDependent'` or `'LevelIndependent'` |
+| `SaveOutput` | `false` | Save denoised data to file |
+| `OutputPath` | `'./WAVDeSc_output.csv'` | Output file path |
+| `Verbose` | `true` | Display progress messages |
+| `PlotResults` | `false` | Generate visualization plots |
+| `ComputeMetrics` | `false` | Compute performance metrics |
+| `GroundTruth` | `[]` | Ground truth data for evaluation |
+
+
+### **Troubleshooting**
+
+#### Memory Issues
+
+If you encounter "array exceeds maximum array size" errors:
+
+```matlab
+% Solution 1: Reduce decomposition level
+denoised = WAVDeSc(data, 'DecompositionLevel', 2);
+
+% Solution 2: Use simpler wavelet
+denoised = WAVDeSc(data, 'Wavelet', 'db4', 'DecompositionLevel', 3);
+
+% Solution 3: Process subset first for testing
+subset = data(1:2000, :);
+denoised_subset = WAVDeSc(subset, 'DecompositionLevel', 3);
+```
+
+#### **File Reading Issues**
+
+If your CSV/TSV file has mixed text and numeric data:
+
+```matlab
+% Prepare data manually
+raw_data = readtable('data.tsv', 'FileType', 'text');
+gene_names = raw_data{:,1};
+cell_names = raw_data.Properties.VariableNames(2:end);
+expression_matrix = table2array(raw_data(:,2:end));
+
+% Then denoise
+denoised = WAVDeSc(expression_matrix);
+
+% Save with labels
+output_table = array2table(denoised, ...
+    'RowNames', gene_names, ...
+    'VariableNames', cell_names);
+writetable(output_table, 'denoised.csv', 'WriteRowNames', true);
+```
+
+### **Output Files**
+
+If `SaveOutput` is enabled, WAVDeSc generates:
+
+- **Denoised expression matrix**: CSV file with denoised values
+- Preserves gene names (row names) and cell IDs (column names)
+- Same dimensions as input data
+
+### **Tips for Best Results**
+
+1. **Start with default parameters** for initial testing
+2. **Use lower decomposition levels** (2-4) for large datasets
+3. **Enable visualization** (`PlotResults`) to inspect denoising quality
+4. **Test on a subset** before processing entire dataset
+5. **Compare different wavelets** (`db4`, `db6`, `bior2.6`) for your specific data
+6. **Use hard thresholding** for sparse scRNA-seq data (default)
+7. **Save intermediate results** for reproducibility
+
+
+## Citation
+
+If you use WAVDeSc in your research, please cite:
+
+```bibtex
+@article{wavdesc2025,
+  title={WAVDeSc: Wavelet-Based Denoising for Single-Cell RNA Sequencing Data},
+  author={Mensah, Isabel and Appati, Justice Kwame and Salifu, Samson Pandam and Amoako-Yirenkyi, Peter},
+  journal={Journal Name},
+  year={2025}
+}
+```
 
 ## License  
 
