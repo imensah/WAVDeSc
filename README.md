@@ -23,9 +23,11 @@ This repository contains the datasets and scripts used to generate the figures i
 
 ├── [`Datasets`](datasets/) </br>
 ├── [`Denoising Methods`](denoising_methods/) </br>
-├── [`Evaluation Methods`](evaluatin_methods/) </br>
+├── [`Evaluation Methods`](evaluation_methods/) </br>
+├── [`WAVDeSc Module`](module/) </br>
 ├── [`Results`](results/) </br>
-└── [`Scripts`](scripts/) </br>
+├── [`Scripts`](scripts/) </br>
+└── [`READ ME`](README.md/) </br>
  
 ---
 
