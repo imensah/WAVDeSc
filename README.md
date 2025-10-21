@@ -9,8 +9,9 @@
 - [Datasets](#Datasets)
 - [Denoising Methods](#Denoising-Methods)
 - [Usage](#Usage)
-- [Citation](#Features)
-- [Licence](#References)
+- [Citation](#Citation)
+- [License](#License)
+- [Reference](#Reference)
 
 ## Background
 WAVDeSc leverages biorthogonal wavelet transforms to decompose scRNA-seq data into different frequency components and applies Bayesian thresholding to remove noise. The pipeline comprises three main phases: Signal Decomposition, Thresholding, and Signal Reconstruction aimed at producing a denoised scRNA-seq output. The approach enables the recovery of technical zeros and enhances quality while preserving important biological signals and improving downstream analyses.  
@@ -309,12 +310,4 @@ If you use WAVDeSc in your research, please cite:
 - This project is open-source.  
 
 ## Reference
-
-```bibtex
-@article{poggi1996wavelet,
-  title={Wavelet Toolbox: For Use with MATLAB},
-  author={Poggi, Jean-Michel and others},
-  journal={The MathWorks},
-  year={1996}
-}
-```
+1. Poggi, J. M. (1996). Wavelet Toolbox: For Use with MATLAB. The MathWorks.
